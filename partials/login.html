@@ -1,0 +1,11 @@
+<div class="jumbotron">
+    <form data-ng-submit="login()" class="form-signin">
+        <h2 class="form-signin-heading">Please sign in</h2>
+        <input type="text" data-ng-model="email" class="form-control" placeholder="Email address" autofocus>
+        <input type="password" data-ng-model="password" class="form-control" placeholder="Password">
+        <label class="checkbox">
+            <input type="checkbox" data-ng-model="rememberMe" value="1"> Remember me
+        </label>
+        <button class="btn btn-lg btn-primary btn-block" type="submit" data-ng-disabled="loginForm.$invalid">Sign in</button>
+    </form>
+</div>

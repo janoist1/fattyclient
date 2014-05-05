@@ -1,0 +1,43 @@
+<nav data-ng-controller="NavController" data-access-level="accessLevels.player" class="navbar navbar-default"
+     role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse"
+                    data-target="#navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{path('IndexController')}}">DamFatty</a>
+        </div>
+        <div class="collapse navbar-collapse" id="navbar-collapse-1">
+            <p data-ng-if="isPlayAvailable" class="navbar-text">
+                <a data-ng-click="play()" href="#" class="navbar-link"><span
+                        class="glyphicon glyphicon-play-circle"></span> Play!</a>
+            </p>
+
+            <p class="navbar-text">
+                <a href="{{ path('LobbyController') }}" class="navbar-link"><span
+                        class="glyphicon glyphicon-list"></span> Lobby</a>
+            </p>
+
+            <p class="navbar-text">
+                <a href="#" class="navbar-link"><span class="glyphicon glyphicon-book"></span> Rules</a>
+            </p>
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span
+                            class="glyphicon glyphicon-user"></span> {{ user.name }} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Action</a></li>
+                        <li><a href="#">Another action</a></li>
+                        <li><a href="#">Something else here</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#" data-ng-click="logout()">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

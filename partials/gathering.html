@@ -1,0 +1,27 @@
+<div class="row">
+    <div class="col-md-6 col-md-offset-1">
+        <h1>{{ table.name }}</h1>
+        <p>Waiting for players...</p>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-md-3 col-md-offset-1">
+        <ul data-ng-repeat="player in table.players" class="list-group">
+            <li class="list-group-item" data-ng-class="{'list-group-item-success': player.is_ready}">
+                <span data-ng-if="!player.is_ready" class="badge">Waiting...</span>
+                <span data-ng-if="player.is_ready" class="badge">Ready!</span>
+                {{ getPlayerById(player.player_id).name }}
+            </li>
+        </ul>
+    </div>
+    <div class="col-md-3 col-md-offset-1">
+        <button data-ng-if="!isReady" data-ng-click="ready()" type="button" class="btn btn-success btn-sm">
+            <span class="glyphicon glyphicon-ok-circle"></span> I'm ready!
+        </button>
+        <button data-ng-if="isReady" data-ng-click="notReady()" type="button" class="btn btn-warning btn-sm">
+            <span class="glyphicon glyphicon-ok-circle"></span> Not ready!
+        </button>
+        <button data-ng-click="leaveTable()" type="button" class="btn btn-danger btn-sm">
+            <span class="glyphicon glyphicon-remove-circle"></span> Leave this table
+        </button>
+    </div>
+</div>

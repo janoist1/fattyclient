@@ -1,0 +1,31 @@
+<div class="col-md-6 col-md-offset-1">
+    <h1>Lobby</h1>
+</div>
+<div class="clearfix">
+    <div class="row"></div>
+    <div class="col-md-3 col-md-offset-1">
+
+        <p>Choose a table to play:</p>
+
+        <div data-ng-repeat="table in tables" class="list-group">
+            <a data-ng-click="sitDown(table.table_id)" href="#" class="list-group-item"
+               data-ng-class="{active: tableId == table.table_id}">
+                <span class="badge">{{ table.players.length }}</span>{{ table.name }}
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+
+        <p>Or create a new one:</p>
+
+        <div class="input-group">
+            <input data-ng-model="newTableName" type="text" class="form-control" placeholder="new table name..."/>
+            <span class="input-group-btn">
+                <button data-ng-click="newTable()" class="btn btn-success" type="button"><span
+                        class="glyphicon glyphicon-file"></span> New!
+                </button>
+            </span>
+        </div>
+    </div>
+</div>
