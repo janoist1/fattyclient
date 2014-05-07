@@ -433,6 +433,23 @@ damFattyServices.factory('Game', ['Auth', 'Client',
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
+
+            Client.on(Client.PACKET.PLAYER_LEFT, function (data) {
+                var table = this.getTableByPlayerId(data.player_id);
+                if (table) {
+                    if (table.isReady) {
+                        // game already started, notice user left
+                    } else {
+                        // game hasn't started yet, simply remove the user
+                        table.removePlayerById(data.player_id);
+                    }
+                    fireEvent(this.EVENT.TABLE_CHANGE, this);
+                }
+
+                this.removePlayerById(data.player_id);
+
+                fireEvent(this.EVENT.PLAYER_CHANGE, this);
+            }.bind(this));
         }
 
         return new Game();
