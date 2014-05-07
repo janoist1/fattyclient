@@ -69,7 +69,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @param player
              * @type {function(this:Game)|*}
              */
-            this.addTable = function (player) {
+            this.addPlayer = function (player) {
                 this.players.push(player);
             }.bind(this);
 
@@ -79,8 +79,8 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @param tableId
              * @type {function(this:Game)|*}
              */
-            this.removeTableById = function (playerId) {
-                this.players = _.without(this.tables, this.getTableById(playerId));
+            this.removePlayerById = function (playerId) {
+                this.players = _.without(this.players, this.getPlayerById(playerId));
             }.bind(this);
 
             /**
