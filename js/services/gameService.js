@@ -41,6 +41,8 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             this.tables = [];
             this.deckUp = null;
             this.deckDown = null;
+            this.isReady = false;
+            this.isStarted = false;
             this.isSwapDone = false;
 
             /**
@@ -395,6 +397,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                     player.carsDown = convertCards(data.cards[playerId].cards_down);
                 }
 
+                this.isStarted = true;
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
