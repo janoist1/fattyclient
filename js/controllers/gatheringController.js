@@ -4,7 +4,6 @@ damFattyControllers.controller('GatheringController', ['$scope', 'Game', 'Naviga
     function ($scope, Game, Navigation) {
         $scope.isReady = false;
         $scope.table = Game.getTable();
-        $scope.getPlayerById = Game.getPlayerById;
 
         $scope.ready = function () {
             Game.ready();
@@ -32,7 +31,7 @@ damFattyControllers.controller('GatheringController', ['$scope', 'Game', 'Naviga
         });
         Game.on(Game.EVENT.TABLE_READY, function () {
             $scope.$apply(function () {
-                Navigation.navigateTo(Navigation.path('TableController', {tableId: $scope.table.table_id}));
+                Navigation.navigateTo(Navigation.path('TableController', {tableId: $scope.table.id}));
             });
         });
     }

@@ -27,16 +27,16 @@
     </div>
     <div data-ng-repeat="player in table.players" data-repeat-done="draw()" class="player scaled">
         <div class="player-container">
-            <div class="name">{{ player.player_id }}</div>
+            <div class="name">{{ player.name }}</div>
             <div class="cards-container">
                 <div class="cards card-set cards-hand">
-                    <div data-ng-repeat="card in player.cards_hand" class="card card-{{ card }}"></div>
+                    <div data-ng-repeat="card in player.cardsHand" class="card card-{{ card }}"></div>
                 </div>
                 <div class="cards card-set cards-up">
-                    <div data-ng-repeat="card in player.cards_up" class="card card-{{ card }}"></div>
+                    <div data-ng-repeat="card in player.cardsUp" class="card card-{{ card }}"></div>
                 </div>
                 <div class="cards card-set cards-down">
-                    <div data-ng-repeat="card in player.cards_down" class="card card-{{ card }}"></div>
+                    <div data-ng-repeat="card in player.cardsDown" class="card card-{{ card }}"></div>
                 </div>
             </div>
         </div>

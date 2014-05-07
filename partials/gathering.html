@@ -6,10 +6,10 @@
     <div class="clearfix"></div>
     <div class="col-md-3 col-md-offset-1">
         <ul data-ng-repeat="player in table.players" class="list-group">
-            <li class="list-group-item" data-ng-class="{'list-group-item-success': player.is_ready}">
-                <span data-ng-if="!player.is_ready" class="badge">Waiting...</span>
-                <span data-ng-if="player.is_ready" class="badge">Ready!</span>
-                {{ getPlayerById(player.player_id).name }}
+            <li class="list-group-item" data-ng-class="{'list-group-item-success': player.isReady}">
+                <span data-ng-if="!player.isReady" class="badge">Waiting...</span>
+                <span data-ng-if="player.isReady" class="badge">Ready!</span>
+                {{ player.name }}
             </li>
         </ul>
     </div>

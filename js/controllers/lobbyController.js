@@ -3,6 +3,7 @@
 damFattyControllers.controller('LobbyController', ['$scope', 'Navigation', 'Game',
     function ($scope, Navigation, Game) {
         $scope.tables = Game.tables;
+        $scope.tableId = Game.tableId;
         $scope.newTableName = '';
 
         $scope.newTable = function () {

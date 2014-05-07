@@ -11,6 +11,20 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }
         }
 
+        function convertCards(cards) {
+            var cardObjects = [];
+
+            for (var i in cards) {
+                var card = new Card(
+                    cards[i].type,
+                    cards[i].value
+                );
+                cardObjects.push(card)
+            }
+
+            return cardObjects;
+        }
+
         function Game() {
             this.EVENT = {
                 LOAD: 'load',
@@ -22,16 +36,15 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             };
 
             this.playerId = null;
-            this.players = null;
+            this.players = [];
             this.tableId = null;
-            this.tables = null;
+            this.tables = [];
             this.deckUp = null;
             this.deckDown = null;
             this.isSwapDone = false;
 
-
             /**
-             * Returns the current/active player
+             * Returns the current/active Player
              *
              * @type {function(this:Game)|*}
              */
@@ -40,25 +53,36 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this);
 
             /**
-             * Returns the current/active player with its cards
-             *
-             * @type {function(this:Game)|*}
-             */
-            this.getTablePlayer = function () {
-                return _.findWhere(this.getTable().players, {player_id: this.playerId});
-            }.bind(this);
-
-            /**
-             * Returns a player by its ID
+             * Returns a Player by its ID
              *
              * @type {function(this:Game)|*}
              */
             this.getPlayerById = function (playerId) {
-                return _.findWhere(this.players, { player_id: playerId });
+                return _.findWhere(this.players, { id: playerId });
             }.bind(this);
 
             /**
-             * Returns the current/active table
+             * Adds a Player
+             *
+             * @param player
+             * @type {function(this:Game)|*}
+             */
+            this.addTable = function (player) {
+                this.players.push(player);
+            }.bind(this);
+
+            /**
+             * Removes a Player by its ID
+             *
+             * @param tableId
+             * @type {function(this:Game)|*}
+             */
+            this.removeTableById = function (playerId) {
+                this.players = _.without(this.tables, this.getTableById(playerId));
+            }.bind(this);
+
+            /**
+             * Returns the current/active Table
              *
              * @type {function(this:Game)|*}
              */
@@ -67,17 +91,37 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this);
 
             /**
-             * Returns a table by its ID
+             * Returns a Table by its ID
              *
              * @param tableId
              * @type {function(this:Game)|*}
              */
             this.getTableById = function (tableId) {
-                return _.findWhere(this.tables, {table_id: tableId});
+                return _.findWhere(this.tables, {id: tableId});
             }.bind(this);
 
             /**
-             * Returns a table by a player ID
+             * Adds a Table
+             *
+             * @param table
+             * @type {function(this:Game)|*}
+             */
+            this.addTable = function (table) {
+                this.tables.push(table);
+            }.bind(this);
+
+            /**
+             * Removes a Table by its ID
+             *
+             * @param tableId
+             * @type {function(this:Game)|*}
+             */
+            this.removeTableById = function (tableId) {
+                this.tables = _.without(this.tables, this.getTableById(tableId));
+            }.bind(this);
+
+            /**
+             * Returns a Table by a player ID
              *
              * @param playerId
              * @type {function(this:Game)|*}
@@ -87,7 +131,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
 
                 _.each(this.tables, function (table) {
                     _.each(table.players, function (player) {
-                        if (player.player_id == playerId) {
+                        if (player.id == playerId) {
                             tableRet = table;
                         }
                     });
@@ -102,18 +146,9 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @type {function(this:Game)|*}
              */
             this.getAvailableCards = function () {
-                var player = this.getTablePlayer();
+                var player = this.getPlayer();
 
-                switch (true) {
-                    case player === undefined:
-                        return null;
-                    case player.cards_hand.length > 0:
-                        return player.cards_hand;
-                    case player.cards_up.length > 0:
-                        return player.cards_up;
-                    default:
-                        return player.cards_down;
-                }
+                return player ? player.getAvailableCards() : null;
             }.bind(this);
 
             /**
@@ -132,7 +167,6 @@ damFattyServices.factory('Game', ['Auth', 'Client',
 //                    });
                 };
             }.bind(this);
-
 
             /**
              * Sends a newTable packet
@@ -157,9 +191,9 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                 this.tableId = tableId;
 
                 var table = this.getTableById(tableId);
-                if (!_.findWhere(table.players, {player_id: this.playerId})) {
+                if (!table.getPlayerById(this.playerId)) {
                     Client.send(Client.PACKET.SIT_DOWN, {
-                        table_id: table.table_id
+                        table_id: table.id
                     });
                 }
             }.bind(this);
@@ -210,7 +244,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @type {function(this:Game)|*}
              */
             this.swap = function (cardToHand, cardToUp) {
-                var player = this.getTablePlayer();
+                var player = this.getPlayer();
 
                 player.cards_hand = _.without(player.cards_hand, cardToUp);
                 player.cards_hand.push(cardToHand);
@@ -224,7 +258,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @type {function(this:Game)|*}
              */
             this.swapDone = function () {
-                var player = this.getTablePlayer();
+                var player = this.getPlayer();
                 Client.send(Client.PACKET.SWAP, {
                     cards_up: player.cards_up
                 });
@@ -264,45 +298,65 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this));
 
             Client.on(Client.PACKET.TABLES_LIST, function (data) {
-                this.tables = data;
+                for (var i in data) {
+                    var table = new Table(
+                        data[i].table_id,
+                        data[i].name,
+                        data[i].is_ready
+                    );
+                    this.addTable(table);
+                }
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
 
             Client.on(Client.PACKET.PLAYERS_LIST, function (data) {
-                this.players = data;
+                for (var i in data) {
+                    var player = new Player(
+                        data[i].player_id,
+                        data[i].name,
+                        false
+                    );
+                    this.addPlayer(player);
+                }
 
                 fireEvent(this.EVENT.PLAYER_CHANGE, this);
                 fireEvent(this.EVENT.LOAD, this);
             }.bind(this));
 
             Client.on(Client.PACKET.NEW_PLAYER, function (data) {
-                this.players.push(data);
+                var player = new Player(
+                    data.player_id,
+                    data.name,
+                    false
+                );
+                this.addPlayer(player);
 
                 fireEvent(this.EVENT.PLAYER_CHANGE, this);
             }.bind(this));
 
             Client.on(Client.PACKET.NEW_TABLE, function (data) {
-                this.tables.push(data);
+                var table = new Table(
+                    data.table_id,
+                    data.name,
+                    data.is_ready
+                );
+                this.addTable(table);
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
 
             Client.on(Client.PACKET.TABLE_CLOSED, function (data) {
-                this.tables = _.without(
-                    this.tables,
-                    _.findWhere(this.tables, { table_id: data.table_id })
-                );
+                this.removeTableById(data.table_id);
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
 
             Client.on(Client.PACKET.SIT_DOWN, function (data) {
                 var table = this.getTableById(data.table_id);
-                table.players.push({
-                    player_id: data.player_id,
-                    is_ready: false
-                });
+                var player = this.getPlayerById(data.player_id);
+
+                table.addPlayer(player);
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
@@ -315,57 +369,38 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this));
 
             Client.on(Client.PACKET.PLAYER_READY, function (data) {
-                _.each(this.tables, function (table) {
-                    _.each(table.players, function (player) {
-                        if (player.player_id == data.player_id) {
-                            player.is_ready = true;
-                        }
-                    });
-                });
+                this.getPlayerById(data.player_id).isReady = true;
+
+                fireEvent(this.EVENT.TABLE_CHANGE, this);
+            }.bind(this));
+
+            Client.on(Client.PACKET.PLAYER_NOT_READY, function (data) {
+                this.getPlayerById(data.player_id).isReady = false;
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
 
             Client.on(Client.PACKET.TABLE_READY, function (data) {
+                this.getTableById(data.table_id).isReady = true;
+
                 fireEvent(this.EVENT.TABLE_READY, this);
             }.bind(this));
 
             Client.on(Client.PACKET.GAME_START, function (data) {
-                var table = this.getTable();
+                for (var playerId in data.cards) {
+                    var player = this.getPlayerById(playerId);
 
-                _.each(data.cards, function (cards, playerId) {
-                    _.each(table.players, function (item) {
-                        if (item.player_id == playerId) {
-                            item.cards_hand = cards.cards_hand
-                            item.cards_up = cards.cards_up
-                            item.cards_down = cards.cards_down
-                        }
-                    });
-                });
+                    player.carsHand = convertCards(data.cards[playerId].cards_hand);
+                    player.carsUp = convertCards(data.cards[playerId].cards_up);
+                    player.carsDown = convertCards(data.cards[playerId].cards_down);
+                }
 
-                fireEvent(this.EVENT.GAME_START, this);
-            }.bind(this));
-
-            Client.on(Client.PACKET.PLAYER_NOT_READY, function (data) {
-                _.each(this.tables, function (table) {
-                    _.each(table.players, function (player) {
-                        if (player.player_id == data.player_id) {
-                            player.is_ready = false;
-                        }
-                    });
-                });
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
 
             Client.on(Client.PACKET.SWAP, function (data) {
-                _.each(this.tables, function (table) {
-                    _.each(table.players, function (player) {
-                        if (player.player_id == data.player_id) {
-                            player.cards_up = data.cards_up;
-                        }
-                    });
-                });
+                this.getPlayerById(data.player_id).cards_up = data.cards_up;
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
@@ -374,35 +409,23 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this));
 
             Client.on(Client.PACKET.PLAYER_LEFT_TABLE, function (data) {
-                // is the table ready ?
-                var isReady = true;
-                _.each(this.tables, function (table) {
-                    if (table.players.length <= 1) {
-                        isReady = false;
-                    } else if (isReady) {
-                        _.each(table.players, function (player) {
-                            if (isReady && !player.is_ready) {
-                                isReady = false;
-                            }
-                        });
-                    }
-                });
-
                 if (data.player_id == this.playerId) {
                     this.tableId = null;
+                    this.isReady = false;
+                    this.isStarted = false;
+                    this.isSwapDone = false;
+                    this.deckDown = null;
+                    this.deckUp = null;
                 }
 
-                if (isReady) {
+                this.getPlayerById(data.player_id).isReady = false;
+
+                var table = this.getTableByPlayerId(data.player_id);
+                if (table.isReady) {
                     // game already started, notice user left
                 } else {
                     // game hasn't started yet, simply remove the user
-                    _.each(this.tables, function (table) {
-                        table.players = _.reject(table.players, function (player) {
-                            if (player.player_id == data.player_id) {
-                                return true;
-                            }
-                        });
-                    });
+                    table.removePlayerById(data.player_id);
                 }
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);

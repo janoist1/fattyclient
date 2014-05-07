@@ -3,7 +3,7 @@
 damFattyControllers.controller('TableController', ['$scope', 'Game',
     function ($scope, Game) {
         $scope.table = Game.getTable();
-        $scope.player = Game.getTablePlayer();
+        $scope.player = Game.getPlayer();
         $scope.isSwapDone = Game.isSwapDone;
         $scope.cardsAvailable = Game.getAvailableCards();
         $scope.cardsSwap = $scope.player.cards_up;

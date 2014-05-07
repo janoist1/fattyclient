@@ -15,10 +15,12 @@ damFattyControllers.controller('NavController', ['$scope', 'Navigation', 'Auth',
 
         $scope.play = function () {
             var table = Game.getTable();
-            if (table) {
-                Navigation.navigateTo(Navigation.path('TableController', {tableId: table.table_id}));
+            if (Game.isStarted) {
+                Navigation.navigateTo(Navigation.path('TableController', {tableId: table.id}));
+            } else if (table) {
+                Navigation.navigateTo(Navigation.path('GatheringController', {tableId: table.id}));
             } else {
-                var tableId = Game.tables[0].table_id;
+                var tableId = Game.tables[0].id;
 
                 if (tableId == Game.tableId) {
                     Navigation.navigateTo(Navigation.path('GatheringController', {tableId: tableId}));
