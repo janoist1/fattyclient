@@ -7,7 +7,7 @@
 
         <p>Choose a table to play:</p>
 
-        <div data-ng-repeat="table in tables" class="list-group">
+        <div data-ng-repeat="table in tables | filter:{isReady: false}" class="list-group">
             <a data-ng-click="sitDown(table.id)" href="#" class="list-group-item"
                data-ng-class="{active: tableId == table.id}">
                 <span class="badge">{{ table.players.length }}</span>{{ table.name }}
