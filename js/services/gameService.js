@@ -115,17 +115,12 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @type {function(this:Game)|*}
              */
             this.getTableByPlayerId = function (playerId) {
-                var tableRet = null;
-
-                _.each(this.tables, function (table) {
-                    _.each(table.players, function (player) {
-                        if (player.id == playerId) {
-                            tableRet = table;
-                        }
-                    });
-                });
-
-                return tableRet;
+                for (var i in this.tables) {
+                    if (this.tables[i].getPlayerById(playerId)) {
+                        return this.tables[i];
+                    }
+                }
+                return null;
             }.bind(this);
 
             /**
