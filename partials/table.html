@@ -6,7 +6,7 @@
                 <h4 class="modal-title">Choose a card to swap to...</h4>
             </div>
             <div class="modal-body">
-                <div data-ng-click="swap(card)" data-ng-repeat="card in cardsSwap" class="card card-{{ card }}"></div>
+                <div data-ng-click="swap(card)" data-ng-repeat="card in cardsSwap.cards" class="card card-{{ card.toString() }}"></div>
                 <div class="clearfix"></div>
             </div>
             <div class="modal-footer">
@@ -30,13 +30,13 @@
             <div class="name">{{ player.name }}</div>
             <div class="cards-container">
                 <div class="cards card-set cards-hand">
-                    <div data-ng-repeat="card in player.cardsHand" class="card card-{{ card.toString() }}"></div>
+                    <div data-ng-repeat="card in player.cardsHand.cards" class="card card-{{ card.toString() }}"></div>
                 </div>
                 <div class="cards card-set cards-up">
-                    <div data-ng-repeat="card in player.cardsUp" class="card card-{{ card.toString() }}"></div>
+                    <div data-ng-repeat="card in player.cardsUp.cards" class="card card-{{ card.toString() }}"></div>
                 </div>
                 <div class="cards card-set cards-down">
-                    <div data-ng-repeat="card in player.cardsDown" class="card card-{{ card.toString() }}"></div>
+                    <div data-ng-repeat="card in player.cardsDown.cards" class="card card-{{ card.toString() }}"></div>
                 </div>
             </div>
         </div>
@@ -44,5 +44,5 @@
 </div>
 
 <div id="hand">
-    <div data-ng-click="cardClick(card)" data-ng-repeat="card in cardsAvailable" class="card card-{{ card.toString() }}"></div>
+    <div data-ng-click="cardClick(card)" data-ng-repeat="card in cardsAvailable.cards" class="card card-{{ card.toString() }}"></div>
 </div>

@@ -5,15 +5,15 @@ damFattyControllers.controller('TableController', ['$scope', 'Game',
         $scope.table = Game.getTable();
         $scope.player = Game.getPlayer();
         $scope.isSwapDone = Game.isSwapDone;
-        $scope.cardsAvailable = Game.getAvailableCards();
-        $scope.cardsSwap = $scope.player.cards_up;
+        $scope.cardsAvailable = Game.getAvailableCardSet();
+        $scope.cardsSwap = Game.getPlayer().cardsUp;
 
         var cardSwap = null;
 
         $scope.cardClick = function (cardId) {
-            cardSwap = cardId;
 
             if (!Game.isSwapDone) {
+                cardSwap = cardId;
                 $('#swap').modal();
                 return;
             }
@@ -22,14 +22,14 @@ damFattyControllers.controller('TableController', ['$scope', 'Game',
         $scope.swap = function (card) {
             Game.swap(card, cardSwap);
 
-            $scope.cardsAvailable = Game.getAvailableCards();
-            $scope.cardsSwap = $scope.player.cards_up;
+            $scope.cardsAvailable = Game.getAvailableCardSet();
+            $scope.cardsSwap = Game.getPlayer().cardsUp;
 
             $('#swap').modal('hide');
         };
 
         $scope.swapDone = function () {
-            Game.swapDone($scope.player.cards_up);
+            Game.swapDone();
 
             $scope.isSwapDone = Game.isSwapDone;
             $scope.deckDown = Game.deckDown;

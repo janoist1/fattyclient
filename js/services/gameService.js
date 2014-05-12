@@ -11,17 +11,6 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }
         }
 
-        function convertCards(cards) {
-            var cardObjects = [];
-
-            for (var i in cards) {
-                var card = cards[i].split('_');
-                cardObjects.push(new Card(card[0], card[1]));
-            }
-
-            return cardObjects;
-        }
-
         function Game() {
             this.EVENT = {
                 LOAD: 'load',
@@ -144,10 +133,10 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              *
              * @type {function(this:Game)|*}
              */
-            this.getAvailableCards = function () {
+            this.getAvailableCardSet = function () {
                 var player = this.getPlayer();
 
-                return player ? player.getAvailableCards() : null;
+                return player ? player.getAvailableCardSet() : null;
             }.bind(this);
 
             /**
@@ -245,10 +234,10 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             this.swap = function (cardToHand, cardToUp) {
                 var player = this.getPlayer();
 
-                player.cards_hand = _.without(player.cards_hand, cardToUp);
-                player.cards_hand.push(cardToHand);
-                player.cards_up = _.without(player.cards_up, cardToHand);
-                player.cards_up.push(cardToUp);
+                player.cardsHand.remove(cardToUp);
+                player.cardsHand.add(cardToHand);
+                player.cardsUp.remove(cardToHand);
+                player.cardsUp.add(cardToUp);
             }.bind(this);
 
             /**
@@ -259,7 +248,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             this.swapDone = function () {
                 var player = this.getPlayer();
                 Client.send(Client.PACKET.SWAP, {
-                    cards_up: player.cards_up
+                    cards_up: player.cardsUp.getIds()
                 });
 
                 this.initDeckDown();
@@ -273,10 +262,10 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @type {function(this:Game)|*}
              */
             this.initDeckDown = function () {
-                this.deckDown = [];
+                this.deckDown = new CardSet();
 
                 for (var i = 0; i < 52 - this.players.length * 9; i++) {
-                    this.deckDown.push('0_' + i);
+                    this.deckDown.add(new Card(0, i));
                 }
             }.bind(this);
 
@@ -392,9 +381,9 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                 for (var playerId in data.cards) {
                     var player = this.getPlayerById(playerId);
 
-                    player.cardsHand = convertCards(data.cards[playerId].cards_hand);
-                    player.cardsUp = convertCards(data.cards[playerId].cards_up);
-                    player.cardsDown = convertCards(data.cards[playerId].cards_down);
+                    player.cardsHand.fromIds(data.cards[playerId].cards_hand);
+                    player.cardsUp.fromIds(data.cards[playerId].cards_up);
+                    player.cardsDown.fromIds(data.cards[playerId].cards_down);
                 }
 
                 this.isStarted = true;
@@ -403,7 +392,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this));
 
             Client.on(Client.PACKET.SWAP, function (data) {
-                this.getPlayerById(data.player_id).cards_up = data.cards_up;
+                this.getPlayerById(data.player_id).cardsUp.fromIds(data.cards_up);
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));
