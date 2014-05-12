@@ -16,19 +16,7 @@
     </div>
 </div>
 
-
-<div id="table">
-    <div id="deck">
-        <button data-ng-if="!isSwapDone" data-ng-click="swapDone()" type="button" class="btn btn-default">Swap done!
-        </button>
-        <div class="card-set">
-            <div data-ng-repeat="card in deckDown" class="card card-{{ card }} scaled"></div>
-        </div>
-    </div>
-    <div data-ng-repeat="player in table.players" data-repeat-done="draw()" class="player scaled">
-        <div data-player="player"></div>
-    </div>
-</div>
+<div data-table="table"></div>
 
 <div id="hand">
     <div data-ng-click="cardClick(card)" data-ng-repeat="card in cardsAvailable.cards" class="card card-{{ card.toString() }}"></div>
