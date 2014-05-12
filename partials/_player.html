@@ -1,0 +1,14 @@
+<div class="player-container">
+    <div class="name">{{ player.name }}</div>
+    <div class="cards-container">
+        <div class="cards card-set cards-hand">
+            <div data-ng-repeat="card in player.cardsHand.cards" class="card card-{{ card.toString() }}"></div>
+        </div>
+        <div class="cards card-set cards-up">
+            <div data-ng-repeat="card in player.cardsUp.cards" class="card card-{{ card.toString() }}"></div>
+        </div>
+        <div class="cards card-set cards-down">
+            <div data-ng-repeat="card in player.cardsDown.cards" class="card card-{{ card.toString() }}"></div>
+        </div>
+    </div>
+</div>

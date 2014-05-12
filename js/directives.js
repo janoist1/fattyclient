@@ -13,24 +13,12 @@ damFattyDirectives.directive('repeatDone', function() {
     }
 });
 
-damFattyDirectives.directive('cardSet', function() {
+damFattyDirectives.directive('player', function() {
     return {
-        restrict: 'C',
-        link: function(scope, element, attrs) {
-            if (scope.$last) {
-                var html = $(element.parent().html());
-                var html2 = $(element.parent());
-                var $cards = html.find('.card');
-                var cardsCount = $cards.length;
-                var width = html.width();
-
-                $cards.wrapAll('<div style="position: relative; float: left; width: 100%;"></div>');
-
-                $cards.each(function(i,o) {
-                    var x = (width / cardsCount) * i;
-                    $(this).css('x', x);
-                });
-            }
+        restrict: 'A',
+        templateUrl: '/partials/_player.html',
+        scope: {
+            player: '='
         }
     }
 });
