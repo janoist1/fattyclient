@@ -29,7 +29,8 @@ damFattyServices.factory('Client', [function () {
         PLAYER_LEFT_TABLE: 18,
         GAME_ERROR: 19,
         TABLE_READY: 20,
-        TABLE_CLOSED: 23
+        TABLE_CLOSED: 23,
+        TABLE_RESET: 24
     };
 
     var connection = null;

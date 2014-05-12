@@ -434,6 +434,12 @@ damFattyServices.factory('Game', ['Auth', 'Client',
 
                 fireEvent(this.EVENT.PLAYER_CHANGE, this);
             }.bind(this));
+
+            Client.on(Client.PACKET.TABLE_RESET, function (data) {
+                this.getTableById(data.table_id).reset();
+
+                fireEvent(this.EVENT.TABLE_CHANGE, this);
+            }.bind(this));
         }
 
         return new Game();

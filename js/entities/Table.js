@@ -38,4 +38,13 @@ function Table(id, name, isReady) {
     this.removePlayerById = function (playerId) {
         this.players.pop(player);
     }.bind(this);
+
+    /**
+     *
+     * @type {function(this:Table)|*}
+     */
+    this.reset = function () {
+        this.isReady = false;
+        this.players = [];
+    }.bind(this);
 }
