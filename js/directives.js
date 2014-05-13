@@ -66,6 +66,17 @@ damFattyDirectives.directive('player', function () {
     }
 });
 
+damFattyDirectives.directive('cardSet', function () {
+    return {
+        restrict: 'A',
+        templateUrl: '/partials/_cardSet.html',
+        scope: {
+            cards: '='
+        },
+        replace: true
+    }
+});
+
 damFattyDirectives.directive('accessLevel', ['$rootScope', 'Auth',
     function ($rootScope, Auth) {
         return {
