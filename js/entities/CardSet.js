@@ -7,6 +7,11 @@ function CardSet(cards) {
 
     this.cards = cards || [];
 
+    /**
+     * Returns an array of Card IDs
+     *
+     * @returns {Array}
+     */
     this.getIds = function () {
         var ids = [];
         for (var i in this.cards) {
@@ -15,6 +20,11 @@ function CardSet(cards) {
         return ids;
     };
 
+    /**
+     * Fills up from the given IDs
+     *
+     * @param ids
+     */
     this.fromIds = function (ids) {
         this.cards = [];
         for (var i in ids) {
@@ -24,10 +34,20 @@ function CardSet(cards) {
         }
     };
 
+    /**
+     * Adds a Card
+     *
+     * @param card
+     */
     this.add = function (card) {
         this.cards.push(card);
     };
 
+    /**
+     * Removes a Card
+     *
+     * @param card
+     */
     this.remove = function (card) {
         this.cards = _.without(this.cards, card);
     };

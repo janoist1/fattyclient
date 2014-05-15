@@ -15,36 +15,36 @@ function Table(id, name, isReady) {
     /**
      * Returns a Player with the given ID
      *
-     * @type {function(this:Table)|*}
      * @param playerId
      * @returns {Player}
      */
     this.getPlayerById = function (playerId) {
         return _.findWhere(this.players, { id: playerId });
-    }.bind(this);
+    };
 
     /**
+     * Adds a Player
      *
-     * @type {function(this:Table)|*}
+     * @param player
      */
     this.addPlayer = function (player) {
         this.players.push(player);
-    }.bind(this);
+    };
 
     /**
+     * Removes a Player by its ID
      *
-     * @type {function(this:Table)|*}
+     * @param playerId
      */
     this.removePlayerById = function (playerId) {
         this.players.pop(player);
-    }.bind(this);
+    };
 
     /**
-     *
-     * @type {function(this:Table)|*}
+     * Resets the internals of the Table
      */
     this.reset = function () {
         this.isReady = false;
         this.players = [];
-    }.bind(this);
+    };
 }

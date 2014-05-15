@@ -28,5 +28,5 @@ function Player(id, name, isReady) {
             default:
                 return this.cardsDown;
         }
-    }.bind(this);
+    };
 }
