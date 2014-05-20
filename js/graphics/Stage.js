@@ -32,8 +32,8 @@
         }
     };
     Stage.prototype.drawPlayers = function () {
-        var width = this._bounds.width;
-        var height = this._bounds.height;
+        var width = this.getBounds().width;
+        var height = this.getBounds().height;
         var marginX = 0;
         var marginY = 0;
         var length = this.players.length;
@@ -45,7 +45,7 @@
 
             player.x = width / 2 + Math.sin(rad) * ((width - graphics.Player.WIDTH) / 2 - marginX);
             player.y = height / 2 + Math.cos(rad) * ((height - graphics.Player.HEIGHT) / 2 - marginY);
-            this.setBounds(player.x, player.y, Player.WIDTH, Player.HEIGHT);
+            player.setBounds(player.x, player.y, Player.WIDTH, Player.HEIGHT);
             player.redraw();
         }
     };
@@ -63,12 +63,12 @@
         this.addChild(this.deckUp);
     };
     Stage.prototype.drawDeckUp = function () {
-        var width_ = this._bounds.width;
-        var height_ = this._bounds.height;
+        var width_ = this.getBounds().width;
+        var height_ = this.getBounds().height;
         var height = this.deckUp.getBounds().height;
 
-        this.deckUp.x = this._bounds.width / 2 + 15 * graphics.pixelRatio;
-        this.deckUp.y = this._bounds.height / 2 - height;
+        this.deckUp.x = this.getBounds().width / 2 + 15 * graphics.pixelRatio;
+        this.deckUp.y = this.getBounds().height / 2 - height;
         this.deckUp.redraw();
     };
 
@@ -88,8 +88,8 @@
         var width = this.deckDown.getBounds().width;
         var height = this.deckDown.getBounds().height;
 
-        this.deckDown.x = this._bounds.width / 2 - width - 15 * graphics.pixelRatio;
-        this.deckDown.y = this._bounds.height / 2 - height;
+        this.deckDown.x = this.getBounds().width / 2 - width - 15 * graphics.pixelRatio;
+        this.deckDown.y = this.getBounds().height / 2 - height;
         this.deckDown.redraw();
     };
 
@@ -108,8 +108,8 @@
         var width = this.hand.getBounds().width;
         var height = this.hand.getBounds().height;
 
-        this.hand.x = this._bounds.width / 2 - width / 2;
-        this.hand.y = this._bounds.height - height - 25;
+        this.hand.x = this.getBounds().width / 2 - width / 2;
+        this.hand.y = this.getBounds().height - height - 25;
         this.hand.redraw();
     };
 
@@ -128,7 +128,7 @@
 
         this.table.x = marginX;
         this.table.y = marginY;
-        this.table.setBounds(marginX, marginY, this._bounds.width - marginX * 2, this._bounds.height - marginY * 2);
+        this.table.setBounds(marginX, marginY, this.getBounds().width - marginX * 2, this.getBounds().height - marginY * 2);
         this.table.redraw();
     };
 
