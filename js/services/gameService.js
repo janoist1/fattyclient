@@ -21,7 +21,8 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                 TABLE_CHANGE: 'table_change',
                 TABLE_READY: 'table_ready',
                 GAME_START: 'game_start',
-                SWAP_DONE: 'swap_done'
+                SWAP_DONE: 'swap_done',
+                TURN: 'turn'
             };
 
             this.playerId = null;
@@ -50,6 +51,15 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              */
             this.getPlayerById = function (playerId) {
                 return _.findWhere(this.players, { id: playerId });
+            }.bind(this);
+
+            /**
+             * Returns a Player by its ID
+             *
+             * @type {function(this:Game)|*}
+             */
+            this.getActivePlayer = function () {
+                return _.findWhere(this.players, { isActive: true });
             }.bind(this);
 
             /**
@@ -274,6 +284,24 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this);
 
             /**
+             * Makes a turn
+             *
+             * @param cardSet
+             * @param player
+             */
+            this.turn = function (cardSet, player) {
+                var data = {
+                    cards: cardSet.getIds()
+                };
+
+                if (player) {
+                    data.player_id = player.id;
+                }
+
+                Client.send(Client.PACKET.TURN, data);
+            }.bind(this);
+
+            /**
              * Initialises the deckDown
              *
              * @type {function(this:Game)|*}
@@ -419,6 +447,58 @@ damFattyServices.factory('Game', ['Auth', 'Client',
 
                 fireEvent(this.EVENT.PLAYER_CHANGE, this);
                 fireEvent(this.EVENT.SWAP_DONE, this);
+            }.bind(this));
+
+            Client.on(Client.PACKET.TURN, function (data) {
+
+                // todo: refactor !
+
+                var card, i;
+                var player = this.getActivePlayer();
+                player.isActive = false;
+
+                for (i in data.cards_put) {
+                    card = new Card();
+                    card.fromId(data.cards_put[i]);
+                    this.deckUp.add(card);
+                    if (player.id == this.playerId) {
+                        if (player.cardsHand.count()) {
+                            player.cardsHand.removeById(card.getId());
+                        } else if(player.cardsUp.count()) {
+                            player.cardsUp.removeById(card.getId());
+                        } else {
+                            player.cardsDown.removeAt(0);
+                        }
+                    } else {
+                        if (player.cardsHand.count()) {
+                            player.cardsHand.removeAt(0);
+                        } else if(player.cardsUp.count()) {
+                            player.cardsUp.removeById(card.getId());
+                        } else {
+                            player.cardsDown.removeAt(0);
+                        }
+                    }
+                }
+
+                for (i in data.cards_pick) {
+                    card = this.deckUp.getById(data.cards_pick[i]);
+
+                    if (card != null) {
+                        this.deckUp.remove(card);
+                    } else {
+                        if (this.deckDown.count()) {
+                            this.deckDown.removeAt(0);
+                        }
+                        card = new Card();
+                        card.fromId(data.cards_pick[i]);
+                    }
+
+                    player.cardsHand.add(player.id == this.playerId ? card : new Card());
+                }
+
+                this.getPlayerById(data.player_id).isActive = true;
+
+                fireEvent(this.EVENT.TURN, this);
             }.bind(this));
 
             Client.on(Client.PACKET.PLAYER_LEFT_TABLE, function (data) {
