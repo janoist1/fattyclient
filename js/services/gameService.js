@@ -25,8 +25,8 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             this.players = [];
             this.tableId = null;
             this.tables = [];
-            this.deckUp = null;
-            this.deckDown = null;
+            this.deckUp = new CardSet();
+            this.deckDown = new CardSet();
             this.isReady = false;
             this.isStarted = false;
             this.isSwapDone = false;
