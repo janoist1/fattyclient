@@ -25,7 +25,7 @@
 
         for (var i in this.cardSet.cards) {
             var card = new graphics.Card(this.cardSet.cards[i]);
-            var range = Math.min(length * 5, 85);
+            var range = Math.min((length - 1) * 5, 85);
             var rotation = range / -2 + (range / (Math.max(1, length - 1)) * i);
             var rad = rotation * Math.PI / 180;
             var h = height * 2;
