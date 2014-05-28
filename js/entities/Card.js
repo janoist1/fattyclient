@@ -6,8 +6,8 @@
  */
 function Card(type, value) {
 
-    this.type = type || null;
-    this.value = value || null;
+    this.type = type || 0;
+    this.value = value || 0;
 
     /**
      * Returns the ID of the Card
