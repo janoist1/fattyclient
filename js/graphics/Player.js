@@ -51,9 +51,7 @@
             this.cardsHand.redraw();
         }
 
-        if (this.player.isActive) {
-            this.text.color = 'red';
-        }
+        this.text.color = this.player.isActive ? 'red' : 'white';
     };
 
     graphics.Player = Player;
