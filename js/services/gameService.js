@@ -20,7 +20,8 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                 PLAYER_CHANGE: 'player_change',
                 TABLE_CHANGE: 'table_change',
                 TABLE_READY: 'table_ready',
-                GAME_START: 'game_start'
+                GAME_START: 'game_start',
+                SWAP_DONE: 'swap_done'
             };
 
             this.playerId = null;
@@ -414,6 +415,10 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this));
 
             Client.on(Client.PACKET.SWAP_DONE, function (data) {
+                this.getPlayerById(data.player_id).isActive = true;
+
+                fireEvent(this.EVENT.PLAYER_CHANGE, this);
+                fireEvent(this.EVENT.SWAP_DONE, this);
             }.bind(this));
 
             Client.on(Client.PACKET.PLAYER_LEFT_TABLE, function (data) {
