@@ -307,10 +307,8 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @type {function(this:Game)|*}
              */
             this.initDeckDown = function () {
-                this.deckDown = new CardSet();
-
                 for (var i = 0; i < 52 - this.players.length * 9; i++) {
-                    this.deckDown.add(new Card(0, i));
+                    this.deckDown.add(new Card('0', i + 1));
                 }
             }.bind(this);
 
