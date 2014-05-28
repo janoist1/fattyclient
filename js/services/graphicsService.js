@@ -16,6 +16,8 @@ damFattyServices.factory('Graphics', ['Game', function (Game) {
         this.addTable();
         this.addHand(Game.getAvailableCardSet());
         this.addPlayers(players);
+        this.addDeckDown(Game.deckDown);
+        this.addDeckUp(Game.deckUp);
     }.bind(stage);
 
     stage.refresh = function () {
@@ -35,11 +37,8 @@ damFattyServices.factory('Graphics', ['Game', function (Game) {
         this.drawTable();
         this.drawHand();
         this.drawPlayers();
-
-        if (Game.isSwapDone) {
-            this.drawDeckDown();
-            this.drawDeckUp();
-        }
+        this.drawDeckDown();
+        this.drawDeckUp();
 
         this.update();
     }.bind(stage);
