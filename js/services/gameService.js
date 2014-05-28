@@ -5,9 +5,11 @@ damFattyServices.factory('Game', ['Auth', 'Client',
 
         var callbacks = {};
 
-        function fireEvent(event, context, args) {
-            if (event in callbacks) {
-                callbacks[event].apply(context, args);
+        function fireEvent(type, context, args) {
+            if (type in callbacks) {
+                for (var i in callbacks[type]) {
+                    callbacks[type][i].apply(context, args);
+                }
             }
         }
 
@@ -142,13 +144,32 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @type {function(this:Game)|*}
              */
             this.on = function (type, callback) {
-                callbacks[type] = function () {
+                if (!(type in callbacks)) {
+                    callbacks[type] = [];
+                }
+                callbacks[type].push(function () {
                     var args = arguments;
                     callback.apply(this, arguments);
-//                    $rootScope.$apply(function () {
-//                        callback.apply(this, args);
-//                    });
-                };
+                });
+            }.bind(this);
+
+            /**
+             * Removes a function from event listener
+             *
+             * @param type
+             * @param callback
+             * @type {function(this:Game)|*}
+             */
+            this.off = function (type, callback) {
+                if (!(type in callbacks)) {
+                    return;
+                }
+                for (var i in callbacks[type]) {
+                    if(callbacks[type][i] == callback) {
+                        callbacks[type].splice(i,1);
+                        return;
+                    }
+                }
             }.bind(this);
 
             /**
