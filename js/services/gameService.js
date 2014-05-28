@@ -401,8 +401,8 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                     this.isReady = false;
                     this.isStarted = false;
                     this.isSwapDone = false;
-                    this.deckDown = null;
-                    this.deckUp = null;
+                    this.deckDown.removeAll();
+                    this.deckUp.removeAll();
                 }
 
                 this.getPlayerById(data.player_id).isReady = false;

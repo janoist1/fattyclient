@@ -51,4 +51,11 @@ function CardSet(cards) {
     this.remove = function (card) {
         this.cards = _.without(this.cards, card);
     };
+
+    /**
+     * Removes all Cards
+     */
+    this.removeAll = function () {
+        this.cards = [];
+    };
 }
