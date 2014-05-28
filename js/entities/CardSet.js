@@ -44,6 +44,32 @@ function CardSet(cards) {
     };
 
     /**
+     * Gets a Card by its ID
+     *
+     * @param id
+     */
+    this.getById = function (id) {
+        for (var i in this.cards) {
+            if (this.cards[i].getId() == id) {
+                return this.cards[i];
+            }
+        }
+        return null;
+    };
+
+    /**
+     * Gets a Card at index
+     *
+     * @param index
+     */
+    this.getAt = function (index) {
+        if (index < 0 || index >= this.count()) {
+            return null;
+        }
+        return this.cards[index];
+    };
+
+    /**
      * Removes a Card
      *
      * @param card
@@ -53,9 +79,34 @@ function CardSet(cards) {
     };
 
     /**
+     * Removes a Card by its ID
+     *
+     * @param id
+     */
+    this.removeById = function (id) {
+        this.remove(this.getById(id));
+    };
+
+    /**
+     * Removes a Card at index
+     *
+     * @param index
+     */
+    this.removeAt = function (index) {
+        this.cards.splice(index, 1);
+    };
+
+    /**
      * Removes all Cards
      */
     this.removeAll = function () {
         this.cards = [];
+    };
+
+    /**
+     * Counts the cards
+     */
+    this.count = function () {
+        return this.cards.length;
     };
 }
