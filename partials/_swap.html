@@ -1,0 +1,19 @@
+<div id="swap" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Choose a card to swap to...</h4>
+            </div>
+            <div class="modal-body">
+                <div data-ng-click="swap(card)" data-ng-repeat="card in cardsSwap.cards" class="card card-{{ card.toString() }}"></div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="swapDone" data-ng-if="!isSwapDone" data-ng-click="swapDone()" type="button" class="btn btn-default">Swap done!</button>
