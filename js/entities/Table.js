@@ -37,7 +37,9 @@ function Table(id, name, isReady) {
      * @param playerId
      */
     this.removePlayerById = function (playerId) {
-        this.players.pop(player);
+        this.players.filter(function(player) {
+            return player.id != playerId
+        });
     };
 
     /**
