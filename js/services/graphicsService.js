@@ -13,11 +13,11 @@ damFattyServices.factory('Graphics', ['Game', function (Game) {
 
         this.canvas.id = 'tableCanvas';
         this.removeAllChildren();
-        this.addTable();
-        this.addHand(Game.getAvailableCardSet());
-        this.addPlayers(players);
-        this.addDeckDown(Game.deckDown);
-        this.addDeckUp(Game.deckUp);
+        this.initTable();
+        this.initHand(Game.getPlayer().cardsHand);
+        this.initPlayers(players);
+        this.initDeckDown(Game.deckDown);
+        this.initDeckUp(Game.deckUp);
     }.bind(stage);
 
     stage.refresh = function () {

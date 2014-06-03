@@ -107,7 +107,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
              * @param table
              * @type {function(this:Game)|*}
              */
-            this.addTable = function (table) {
+            this.initTable = function (table) {
                 this.tables.push(table);
             }.bind(this);
 
@@ -351,7 +351,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                     for (var j in data[i].player_ids) {
                         table.addPlayer(this.getPlayerById(data[i].player_ids[j]));
                     }
-                    this.addTable(table);
+                    this.initTable(table);
                 }
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
@@ -375,7 +375,7 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                     data.name,
                     data.is_ready
                 );
-                this.addTable(table);
+                this.initTable(table);
 
                 fireEvent(this.EVENT.TABLE_CHANGE, this);
             }.bind(this));

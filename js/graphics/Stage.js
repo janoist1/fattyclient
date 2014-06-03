@@ -20,7 +20,7 @@
     /**
      * Players
      */
-    Stage.prototype.addPlayers = function (players) {
+    Stage.prototype.initPlayers = function (players) {
         this.players = [];
         for (var i in players) {
             var player = new graphics.Player(players[i], i == 0);
@@ -53,7 +53,7 @@
     /**
      * DeckUp
      */
-    Stage.prototype.addDeckUp = function (cardSet) {
+    Stage.prototype.initDeckUp = function (cardSet) {
         var scale = 2 / 3;
         var width = 100 * scale * graphics.pixelRatio;
         var height = graphics.Card.HEIGHT * scale * graphics.pixelRatio;
@@ -75,7 +75,7 @@
     /**
      * DeckDown
      */
-    Stage.prototype.addDeckDown = function (cardSet) {
+    Stage.prototype.initDeckDown = function (cardSet) {
         var scale = 2 / 3;
         var width = 100 * scale * graphics.pixelRatio;
         var height = graphics.Card.HEIGHT * scale * graphics.pixelRatio;
@@ -96,7 +96,7 @@
     /**
      * Hand
      */
-    Stage.prototype.addHand = function (cardSet) {
+    Stage.prototype.initHand = function (cardSet) {
         var width = 400 * graphics.pixelRatio;
         var height = 200 * graphics.pixelRatio;
 
@@ -116,7 +116,7 @@
     /**
      * Table
      */
-    Stage.prototype.addTable = function () {
+    Stage.prototype.initTable = function () {
         var color = '#4cae4c';
 
         this.table = new graphics.Table(color);
