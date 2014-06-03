@@ -467,6 +467,10 @@ damFattyServices.factory('Game', ['Auth', 'Client',
                     }
                 }
 
+                if (data.burn) {
+                    this.deckUp.removeAll();
+                }
+
                 for (i in data.cards_pick) {
                     card = this.deckUp.getById(data.cards_pick[i]);
 
