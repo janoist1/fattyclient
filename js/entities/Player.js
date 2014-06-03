@@ -15,20 +15,4 @@ function Player(id, name, isReady, isActive) {
     this.cardsHand = new CardSet();
     this.cardsUp = new CardSet();
     this.cardsDown = new CardSet();
-
-    /**
-     * Returns the cards available to put
-     *
-     * @type {function(this:Player)|*}
-     */
-    this.getAvailableCardSet = function () {
-        switch (true) {
-            case this.cardsHand.cards.length > 0:
-                return this.cardsHand;
-            case this.cardsUp.cards.length > 0:
-                return this.cardsUp;
-            default:
-                return this.cardsDown;
-        }
-    };
 }

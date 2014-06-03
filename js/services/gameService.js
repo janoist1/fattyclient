@@ -137,17 +137,6 @@ damFattyServices.factory('Game', ['Auth', 'Client',
             }.bind(this);
 
             /**
-             * Returns the cards available to put
-             *
-             * @type {function(this:Game)|*}
-             */
-            this.getAvailableCardSet = function () {
-                var player = this.getPlayer();
-
-                return player ? player.getAvailableCardSet() : null;
-            }.bind(this);
-
-            /**
              * Adds a function to event listener
              *
              * @param type
