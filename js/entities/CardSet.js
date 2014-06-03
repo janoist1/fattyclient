@@ -109,4 +109,13 @@ function CardSet(cards) {
     this.count = function () {
         return this.cards.length;
     };
+
+    /**
+     * Reorders the cards ASC
+     */
+    this.reorder = function() {
+        this.cards = _.sortBy(this.cards, function(card) {
+            return card.value;
+        });
+    };
 }
