@@ -25,8 +25,8 @@ function Card(type, value) {
      */
     this.fromId = function (id) {
         var card = id.split('_');
-        this.type = card[0];
-        this.value = card[1];
+        this.type = parseInt(card[0]);
+        this.value = parseInt(card[1]);
     };
 
     /**
